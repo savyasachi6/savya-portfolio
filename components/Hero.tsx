@@ -17,7 +17,7 @@ export const Hero: React.FC = () => {
             >
                 <div className="relative mb-4 overflow-hidden rounded-full border border-border bg-surface shadow-2xl h-32 w-32 md:h-40 md:w-40">
                     <Image
-                        src="/porfolio.webp"
+                        src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/porfolio.webp`}
                         alt="Savyasachi Thati"
                         fill
                         className="object-cover object-center"

@@ -21,7 +21,7 @@ export const Navbar: React.FC = () => {
                         className="relative overflow-hidden rounded-full border border-primary/20 h-10 w-10 md:h-12 md:w-12 shadow-[0_0_15px_rgba(255,107,53,0.15)]"
                     >
                         <Image
-                            src="/porfolio.webp"
+                            src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/porfolio.webp`}
                             alt="Savyasachi Thati"
                             fill
                             className="object-cover object-center"

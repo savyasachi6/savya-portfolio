@@ -19,7 +19,7 @@ export const ScrollyCanvas: React.FC<ScrollyCanvasProps> = ({ children }) => {
     const getFrameUrl = useMemo(() => {
         return (index: number) => {
             const padded = index.toString().padStart(2, "0");
-            return `/sequence/frame_${padded}.webp`;
+            return `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/sequence/frame_${padded}.webp`;
         };
     }, []);
 
