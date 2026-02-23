@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-base: #121212;
+  --bg-surface: #1A1A1A;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --color-primary: #FF6B35;
+  --color-accent: #3B82F6;
+  --text-primary: #F5F5F5;
+  --text-muted: #888888;
+}
+
+body {
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  /* The layout sets font-family to Inter natively via next/font */
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
