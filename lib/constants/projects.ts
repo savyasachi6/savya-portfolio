@@ -1,5 +1,12 @@
 export const PROJECTS = [
     {
+        title: "Agentic OS",
+        description: "Built a production-grade multi-agent operating system featuring a speculative fractal RAG pipeline, contextual bandit RL routing for LLMs, and a pgvector-backed knowledge graph memory schema.",
+        tag: "LLM Agents & Multi-Agent Systems",
+        stack: ["Python", "LangGraph", "LangChain", "pgvector", "FastAPI"],
+        link: "https://github.com/savyasachi6/agentic_os"
+    },
+    {
         title: "SNAT Port Exhaustion Mitigation",
         description: "Diagnosed Azure App Service SNAT exhaustion for 100k+ daily API requests. Reduced SQL query time by 57% (4.2s to 1.8s) via global using patterns for data access objects, yielding a 70% reduction in outbound connections.",
         tag: "Distributed Systems",

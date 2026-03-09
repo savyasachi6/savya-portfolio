@@ -42,7 +42,7 @@ export const Overlay: React.FC = () => {
                     <span className="block mb-2">Savyasachi Thati</span>
                 </h1>
                 <p className="font-sans text-xl md:text-2xl text-text-muted mt-4">
-                    HPC, AI & <span className="text-primary">Distributed Systems.</span>
+                    HPC, AI, LLM Agents/RAG & <span className="text-primary">Distributed Systems.</span>
                 </p>
             </motion.div>
 

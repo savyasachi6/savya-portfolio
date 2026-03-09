@@ -1,0 +1,682 @@
+# Complete Resume & Cover Letter Generation System
+## Master Reference — Every File, Every Scenario, Every Flow
+
+---
+
+## 1. Directory Architecture (What Lives Where)
+
+```
+ats-job-search/                          ← Project Root
+│
+├── automation/
+│   └── Generate-Application.ps1        ← PowerShell script (PHASE 1: Scaffold)
+│
+├── .agent/workflows/
+│   └── generate-application.md         ← /generate-application slash command (4-step runbook)
+│
+├── Project_Assets/                      ← Master Templates & Reference Docs (NEVER EDIT PER-APPLICATION)
+│   ├── resume_template.tex             ← LuaLaTeX resume base (copied & tailored per application)
+│   ├── cover_letter_template.tex       ← LuaLaTeX cover letter base (copied & tailored per application)
+│   ├── AI_Career_Strategy_Prompt.md    ← Master AI prompt (582 lines — the brain of the entire system)
+│   ├── ATS_Document_Engineering_2026.md← ATS technical compliance reference (5 gates)
+│   ├── Resume_Length_Strategy_2026.md  ← 4-phase research protocol for 1-page vs 2-page decision
+│   ├── Cover_Letter_Standards_2026.md  ← Cover letter structure, paragraph templates, scoring
+│   └── 2026_Application_Standards.md  ← Summary standards doc (inside Project_Assets/)
+│
+├── 2026_Application_Standards.md       ← Root-level copy (also copied per-application by the script)
+│
+└── Applications/
+    └── Feb24/                          ← Date-grouped (MMMdd format)
+        └── Company_JobTitle/           ← One folder per application (auto-created by script)
+            ├── job_description.md      ← You paste the JD here
+            ├── jobtitle_resume.tex     ← Tailored resume (you paste AI output here)
+            ├── jobtitle_coverletter.tex← Tailored cover letter (you paste AI output here)
+            ├── README.md               ← Hiring manager snapshot (AI-generated)
+            ├── AI_Career_Strategy_Prompt.md    ← Copy (reference while tailoring)
+            ├── ATS_Document_Engineering_2026.md← Copy (reference while checking)
+            ├── Resume_Length_Strategy_2026.md  ← Copy (reference during length decision)
+            ├── Cover_Letter_Standards_2026.md  ← Copy (reference during CL writing)
+            └── 2026_Application_Standards.md   ← Copy (reference during compilation)
+```
+
+> **Key design principle:** The `Project_Assets/` folder is your single source of truth. The PowerShell script copies everything into the per-application folder so all reference docs are self-contained with the application.
+
+---
+
+## 2. The End-to-End Pipeline (4 Phases)
+
+```mermaid
+flowchart TD
+    A["PHASE 1\nRun PowerShell Script\nGenerate-Application.ps1"] --> B
+    B["PHASE 2\nPaste Job Description\ninto job_description.md"] --> C
+    C["PHASE 3\nRun AI Prompt\nAI_Career_Strategy_Prompt.md\n(4-step internal AI flow)"] --> D
+    D["PHASE 4\nPaste .tex output → Compile\nlualatex resume.tex\nlualatex coverletter.tex\nVerify PDFs → Submit"]
+```
+
+---
+
+## 3. Phase 1 in Detail — PowerShell Automation ([Generate-Application.ps1](file:///c:/Users/savya/projects/ats-job-search/automation/Generate-Application.ps1))
+
+**How to run:**
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\automation\Generate-Application.ps1 -JobTitle "SpaceX_Software_Engineer" -Company "SpaceX"
+```
+
+**What happens inside the script (line by line logic):**
+
+| Step | What the Script Does |
+|------|---------------------|
+| **Parameters** | Takes `$JobTitle` (required) and `$Company` (optional) |
+| **Folder naming** | Combines Company + JobTitle → strips all non-alphanumeric chars → converts to `snake_case` |
+| **Date folder** | Creates `Applications/Feb24/` (format: `MMMdd` from system date) |
+| **Target folder** | Creates `Applications/Feb24/SpaceX_Software_Engineer/` |
+| **File copy** | Copies: `resume_template.tex` → `spacex_software_engineer_resume.tex`; `cover_letter_template.tex` → `spacex_software_engineer_coverletter.tex`; all 5 reference `.md` files |
+| **Placeholders** | Creates empty `job_description.md` with header prompt; creates empty `README.md` |
+| **Output** | Prints colored success messages with the exact folder path and next steps |
+
+**All 7 files copied per application:**
+
+```
+resume_template.tex             → [jobtitle]_resume.tex
+cover_letter_template.tex       → [jobtitle]_coverletter.tex
+AI_Career_Strategy_Prompt.md    → AI_Career_Strategy_Prompt.md   (unchanged)
+ATS_Document_Engineering_2026.md→ ATS_Document_Engineering_2026.md
+Resume_Length_Strategy_2026.md  → Resume_Length_Strategy_2026.md
+Cover_Letter_Standards_2026.md  → Cover_Letter_Standards_2026.md
+2026_Application_Standards.md   → 2026_Application_Standards.md
+```
+
+> **Plus 2 auto-generated files:** `job_description.md` (placeholder) + `README.md` (empty)
+
+---
+
+## 4. Phase 2 — Paste the Job Description
+
+Open `job_description.md` in the application folder and paste the **complete JD** — every word, every requirement. The AI prompt will analyze this raw text to:
+- Extract the top 5 hard skills and top 3 soft skills
+- Identify the company archetype
+- Build the "Golden Thread" narrative
+- Choose the right proof stories
+- Decide 1 page vs 2 page
+
+> **Do not summarize or paraphrase the JD.** The full text is needed for the AI's semantic analysis.
+
+---
+
+## 5. Phase 3 — The AI Prompt (Master Brain — 582 Lines)
+
+This is the most complex part. The file `AI_Career_Strategy_Prompt.md` is a **Chain-of-Thought (CoT) + ReAct** prompt that makes the AI reason step-by-step like a career strategy agent, not just a text generator.
+
+### What You Feed the AI
+
+Copy the entire `AI_Career_Strategy_Prompt.md` and fill in 4 placeholders at the top:
+
+```
+- Target Role:   [INSERT JOB TITLE EXACTLY AS IN JD]
+- Company:       [INSERT COMPANY NAME]
+- Job Description (JD): [PASTE FULL JD HERE]
+- My Current Resume:    [PASTE CURRENT RESUME OR LAST TAILORED RESUME]
+```
+
+---
+
+### The AI's Internal 4-Step Flow
+
+#### ► STEP 1: Company Background + Length Decision (4 Phases of Research)
+
+This is a Chain-of-Thought reasoning block. The AI must complete **all 4 phases** and output its reasoning before touching any resume content.
+
+---
+
+**PHASE 1 — JD Semantic Analysis (THOUGHT → ACTION → OBSERVATION)**
+
+The AI classifies the company archetype by reading the JD vocabulary:
+
+| Signal in JD | Company Archetype | Resume Length |
+|-------------|-------------------|---------------|
+| "wear many hats," "zero to one," "self-starter" | Early-Stage Startup | **1 page** |
+| "compliance," "must-have X years," "approval chains," "audit" | Formal/Regulated | **2 pages** |
+| "scale," "reliability," "SLAs," "observability" | Growth-stage / Deep Tech | **2 pages** |
+| "move fast," "ship it" | Very Early Startup | **1 page** |
+| Life sciences, legal jargon, credentialing | Professional/Credentialed | **2 pages** |
+
+Seniority is also read from JD structure: **the first 3 bullet points listed = the employer's highest priorities** — these get "prime real estate" in the final resume.
+
+---
+
+**PHASE 2 — External Seniority Benchmarking (THOUGHT → ACTION → OBSERVATION)**
+
+The AI reasons about 3 external signals:
+
+1. **Levels.fyi:** What is the true L-level of this role?
+   - L3–L4 equivalent → 1 page default
+   - L5+ or Staff/Principal → 2 pages
+2. **LinkedIn Peer Test:** `site:linkedin.com/in "[Company]" "[Role]"` — Do peers have 10+ year multi-page profiles?
+   - Yes → 2 pages
+   - No → 1 page
+3. **Crunchbase Funding Stage:**
+   - Pre-Seed / Seed → 1 page
+   - Series A/B → 1–2 pages (depends on role depth)
+   - Series C+ / Public / Enterprise → 2 pages
+   - Federal / Academic → 2–5+ pages
+
+---
+
+**PHASE 3 — Culture Signal Check (THOUGHT → ACTION → OBSERVATION)**
+
+The AI checks two cultural platforms:
+
+- **Blind / Fishbowl:** Are there known resume preferences? (e.g., "McKinsey is 1-page purist" → hard constraint)
+- **Glassdoor Reviews:** 
+  - Frequent "lack of depth" rejection feedback → expand to 2 pages
+  - Frequent "rambling" or "unfocused" feedback → tighten to 1 page
+
+---
+
+**PHASE 4 — Final Decision Matrix**
+
+| Company Archetype | Default Length |
+|-------------------|---------------|
+| Consulting / Finance | **1 Page** |
+| Early-Stage Startup (Seed/A) | **1 Page** |
+| Big Tech / Deep Tech | **2 Pages** |
+| Growth-Stage / Enterprise | **2 Pages** |
+| Defense / Aerospace (SpaceX, Lockheed) | **2 Pages** |
+| Federal / Government / Academic | **2–5+ Pages** |
+
+**Candidate-specific override (Savyasachi Thati):**
+- Default: **1 page** (career length ≈ 5 years)
+- Override to 2 pages ONLY if:
+  - (a) Deep tech / HPC / robotics / autonomous systems role, OR
+  - (b) Peer LinkedIn profiles confirm 2-page norm, OR
+  - (c) Glassdoor shows "lack of depth" is a stated rejection reason
+
+```
+FINAL DECISION OUTPUT:
+- Company archetype: [STATE]
+- Seniority signal: [1-page | 2-page]
+- Culture signal: [Prefers brevity | Prefers depth | Neutral]
+- Candidate default: 1 page (5-year career)
+- Override triggered? [Yes/No] — Reason: [STATE]
+→ RESUME LENGTH: [1 PAGE | 2 PAGES]
+```
+
+---
+
+**After Phase 4 — Still in STEP 1: Signal Extraction & Narrative Setup**
+
+After the length decision, the AI extracts:
+
+1. **JD Signal Extraction**
+   - Top 5 hard skills (e.g., RL, robotics middleware, distributed systems, AI governance)
+   - Top 3 soft skills (e.g., ownership, ambiguity tolerance, cross-functional collaboration)
+   - These become reusable phrases across summary, bullets, and README
+
+2. **Resume Comparison & Gap Alignment**
+   - Compare extracted JD signals against the content of the current resume
+   - Strong evidence → emphasize directly
+   - Partial/adjacent → use transferable framing (never fabricate)
+   - Missing → skip or note as "adjacent experience"
+
+3. **Golden Thread Identification**
+   - One unifying narrative linking all past work to the target role
+   - Examples:
+     - "Scalable Autonomy Systems Builder"
+     - "Reinforcement Learning for Real-World Navigation"
+     - "AI Governance and Risk-Guarded Automation"
+     - "Cloud-Native Backend Architect at Enterprise Scale"
+     - "End-to-End ML Pipeline Engineer"
+   - This Golden Thread must appear in the Summary, across 2–3 flagship bullets, and be implicit in the Cover Letter and README
+
+---
+
+#### ► STEP 2: Tailor the Resume
+
+The AI drafts the full resume in LaTeX-ready Markdown using these rules:
+
+**2.1 Header (mandatory fields)**
+
+```
+Savyasachi Thati
+San Marcos, TX | (817) 622-4814 | savyasachi.thati@gmail.com
+Portfolio: https://savyasachi6.github.io/savya-portfolio/
+GitHub: https://github.com/savyasachi6
+LinkedIn: https://linkedin.com/in/savyasachi-thati
+```
+
+> Contact info is always in the **document body**, never in LaTeX headers/footers (headers/footers have ~20% ATS parse rate)
+
+**2.2 Professional Summary**
+- 3–4 lines max
+- Must contain the **exact job title** from the JD
+- Must integrate the **Golden Thread**
+- Must include at least **3 JD-derived keywords** (primarily hard skills)
+- Tone: direct, evidence-based — never aspirational fluff
+
+**2.3 Experience — Bullet Rules**
+
+Every bullet follows **STAR implicitly** with **F-Pattern** (metric in first 3 words):
+
+| Pattern | Example |
+|---------|---------|
+| ❌ Bad | "Worked on optimizing the database to reduce latency..." |
+| ✅ Good | "Reduced latency 57% by optimizing SQL indexing on a 500k-record pipeline" |
+
+- 3–6 bullets per role depending on seniority and relevance
+- Front-load metric/outcome within the first 3 words
+- Compress or drop clearly irrelevant content
+- Weave in flagship stories where appropriate
+
+**Company-specific signal injection (only when truthfully applicable):**
+
+| Company | Inject These Terms |
+|---------|--------------------|
+| SpaceX / Starlink | Heisenbugs, race conditions, distributed failure modes, fault-tolerant/degraded-mode behavior |
+| KPMG / Consulting | AI governance, risk frameworks, prompt library management, compliance alignment, auditability |
+
+**2.4 Projects Section** (optional — critical for Deep Tech roles)
+- 2–4 projects directly reinforcing JD hard skills
+- Each with 2–3 STAR + F-pattern bullets
+- Link relevant GitHub repos (only those genuinely matching the JD)
+
+**2.5 Education**
+- Degree, institution, location, graduation date
+- Include coursework only when it clearly supports the JD
+
+**2.6 Skills Section**
+- Grouped: Languages, Frameworks, ML/RL, Robotics & Simulation, Cloud & Infra, Tooling
+- JD-mentioned skills appear **first within each group** (maximizes ATS keyword scoring)
+- 15–25 skills max (50+ triggers "keyword stuffing" detection in 2026-era ATS)
+- Every skill in the Skills block must **also appear with evidence in experience bullets** (not just listed)
+
+---
+
+#### ► STEP 3: Draft the Cover Letter
+
+**4-Paragraph Structure:**
+
+**Paragraph 1 — Strategic Alignment (Opening)**
+- Goal: ATS indexing + business-need hook
+- Name the exact role and company (required for correct ATS database indexing)
+- Reference a specific challenge the company is facing (from recent product news, funding announcement, engineering blog) — NOT generic mission statements
+
+> Template: "I am writing to apply for the [Role] at [Company]. Having followed your recent [product/mission pivot], I recognize that [scaling X while maintaining Y] is a primary challenge for your team."
+
+---
+
+**Paragraph 2 — The Hook (Story-Injection Method)**
+- Deliver ONE flagship proof story using **Action + Scope + Tools + Result**
+- Briefly explain the **tradeoff** managed — 2026 firms value *how you think* over *what you did*
+
+**Proof story selection table (matched to JD priority):**
+
+| JD Top Priority | Story to Place in Paragraph 2 |
+|-----------------|-------------------------------|
+| Backend / Data / SWE | SQL latency 4.2s→1.8s (57%) via index optimization |
+| RL / Robotics / Autonomy | PPO agent 92% collision-free in Isaac Sim + ROS 2 |
+| HPC / Distributed Systems | Frontera checkpoint 45min→<2min via parallel HDF5 |
+| LLM / AI / Search | RAG pipeline sub-50ms retrieval, 91% accuracy |
+| DevOps / Platform / Cloud | CI/CD pipeline reduced deploy time 40% (45→27min) |
+| Cloud Infra / Reliability | Azure SNAT exhaustion resolved (70% TCP reduction) |
+
+> Template: "In my previous role at [Firm], I [action + tools] to reduce [metric] by [%]. To solve for [constraint], I chose [A] over [B], which optimized for [long-term goal] despite the [short-term tradeoff]."
+
+---
+
+**Paragraph 3 — Body (Semantic Neighborhoods)**
+- Connect 2–3 skill clusters to JD's high-priority bullet points
+- Use **semantic variations**, not exact keyword repetition (ATS penalizes >2x repetition):
+  - JD says "project management" → write "pipeline ownership" or "cross-functional delivery"
+  - JD says "leadership" → write "technical mentorship" or "outcome accountability"
+
+**Cluster options (select only what's relevant to this JD):**
+
+| Cluster | Key Terms |
+|---------|-----------|
+| Systems / Backend / Full-Stack | reliability, connection pooling, SNAT, SQL optimization, Redis, microservices |
+| RL / Robotics / Autonomy | Sim2Real, reward shaping, PPO, CUDA kernel tuning, ROS 2 |
+| AI / ML / LLM | RAG, FAISS, ONNX, quantization, multi-agent coordination |
+| HPC / Distributed | MPI, Slurm, Lustre I/O, parallel HDF5, TACC Frontera |
+| DevOps / Cloud | Terraform, Kubernetes, GitHub Actions, Azure DevOps, multi-tenant IAM |
+| Governance / Consulting | AI risk frameworks, prompt library management, auditability |
+
+---
+
+**Paragraph 4 — Closing (90-Day Contribution Signal)**
+- State what you could deliver in the first 90 days tied to a specific JD priority
+- Do NOT ask generically for an interview — signal you are already thinking about their roadmap
+
+> Template: "I am ready to discuss how my experience in [field] can help [Company] achieve [goal] by [quarter]. I look forward to reviewing your technical roadmap and sharing how I can contribute to [specific initiative]."
+
+**Cover letter targets:**
+- Length: **150–300 words** (brevity = signal density)
+- Keyword match: **≥70% of the JD's top 10 skill keywords** must appear
+- Zero-party data rule: every paragraph must contain at least one metric (%, $, time) that cannot be hallucinated
+- Tone by archetype:
+  - SpaceX / Deep Tech → First-principles logic, constraints, failure budgets, physical limits
+  - KPMG / Consulting → Strategic adoption framing (capability vs regulation vs risk appetite)
+  - Enterprise / Cloud → Operational reliability, SLA ownership, team-scale delivery
+
+---
+
+#### ► STEP 4: Create the README
+
+A concise `README.md` (<200 words) for the hiring manager:
+
+**Section 1 — "Why Me in 3 Bullets"**
+
+Three bullets, each tied to a top JD priority, drawn from actual flagship stories:
+
+| Domain | Example Bullet |
+|--------|---------------|
+| Backend/SWE | "Reduced SQL query latency 57% and resolved Azure SNAT exhaustion across a 100k+/day API platform at Innova Solutions." |
+| RL/Robotics | "Built and stabilized a PPO navigation agent (92% collision-free) in Isaac Sim + ROS 2, debugging reward hacking via pybind11 reward shaping." |
+| HPC/Infra | "Cut Frontera checkpoint time from 45 min to <2 min by migrating from per-rank file writes to parallel HDF5 collective I/O." |
+| LLM/AI | "Deployed a RAG pipeline (FAISS + sentence transformers) achieving sub-50ms retrieval on 1,000+ docs with 91% accuracy." |
+| DevOps/Cloud | "Reduced deployment time 40% and achieved 99.9% deployment success via Azure DevOps + GitHub Actions CI/CD pipelines." |
+
+**Section 2 — Quick Links**
+- Portfolio, GitHub, LinkedIn always included
+- Medium only for AI/ML, LLM, governance, or research-heavy roles
+- Specific GitHub repo hyperlinked if highly relevant to JD
+
+**Section 3 — Tech Stack / Key Skills Summary**
+- One comma-separated line of the most relevant skills for this JD only
+- Prioritize exact nouns from the JD (e.g., for RL role: `Python, C++, PyTorch, CUDA, ROS 2, Isaac Sim, PPO, pybind11`)
+
+---
+
+#### ► OUTPUT FORMAT (Very Important — What the AI Must Produce)
+
+The AI outputs **3 artifacts in 3 Markdown code blocks**, in this exact order:
+
+```
+1. [jobtitle]_resume.tex        → Full LaTeX resume content
+2. [jobtitle]_coverletter.tex   → Full LaTeX cover letter content
+3. README.md                    → Markdown hiring manager snapshot
+```
+
+---
+
+## 6. Phase 4 — LaTeX Compilation
+
+### The LaTeX Template Architecture
+
+**resume_template.tex structure:**
+
+```latex
+% Must be FIRST — before \documentclass
+\DocumentMetadata{
+    tagging=on,
+    pdfstandard=ua-2,
+    lang=en-US,
+    tagging-setup = {math/setup={mathml-SE}}
+}
+\documentclass[letterpaper,10pt]{article}
+
+% Core packages:
+\usepackage{unicode-math}     % semantic math tagging
+\usepackage[empty]{fullpage}  % full-page layout
+\usepackage{titlesec}         % section formatting
+\usepackage[hidelinks]{hyperref} % accessible links + PDF metadata
+\usepackage{tabularx}         % skills table
+\usepackage{float}            % reading-order lock for tables
+\usepackage{enumitem}         % bullet formatting
+\usepackage[english]{babel}
+
+% Geometry: adds 1 inch of usable text area (expands margins)
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1.0in}
+\addtolength{\topmargin}{-.5in}
+\addtolength{\textheight}{1.0in}
+
+% Section dividers with horizontal rule
+\titleformat{\section}{\large\bfseries}{}{0em}{}[\titlerule]
+\titlespacing{\section}{0pt}{12pt}{6pt}
+```
+
+**cover_letter_template.tex structure:**
+
+```latex
+\DocumentMetadata{tagging=on, pdfstandard=ua-2, lang=en-US}
+\documentclass[letterpaper,10pt]{article}
+\usepackage{fontspec}           % LuaLaTeX font system
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{parskip}            % paragraph spacing (no indent)
+```
+
+### Compile Command
+
+```bash
+# From inside the application folder:
+lualatex [jobtitle]_resume.tex
+lualatex [jobtitle]_coverletter.tex
+```
+
+> **Must use LuaLaTeX — never pdfLaTeX or XeLaTeX.** The `\DocumentMetadata`, `unicode-math`, and `fontspec` packages are LuaLaTeX-only.
+
+---
+
+## 7. The 5 ATS Validation Gates (Pre-Submission Safety Checks)
+
+Every document must pass all 5 gates before it is considered ready to submit. This is documented in `ATS_Document_Engineering_2026.md`.
+
+### Why This Matters — 2026 ATS Statistics
+
+- **~87%** of organizations use AI-driven screening
+- **~75%** of resumes are rejected before a human sees them
+- **~43%** of parsing failures are caused by formatting errors alone
+- **~88%** of resumes with graphics, icons, or multi-column tables are discarded
+
+### Gate 1: Compilation Safety ✓
+
+- [ ] Compiled with **LuaLaTeX** (not pdfLaTeX, not XeLaTeX)
+- [ ] `\DocumentMetadata{lang=en-US, pdfstandard=ua-2, tagging=on}` is present and appears **before** `\documentclass`
+- [ ] Zero LaTeX errors on final compile (non-stop mode is not acceptable for final output)
+- [ ] `\hypersetup` includes correct `author`, `title`, and `keywords` metadata
+
+### Gate 2: Syntactic / Parsing Safety ✓
+
+Every special character must be escaped in LaTeX:
+
+| Identifier | LaTeX | Why |
+|------------|-------|-----|
+| `C#` | `C\#` | Bare `#` = macro parameter error |
+| `M&A` | `M\&A` | Bare `&` = table field delimiter error |
+| `R&D` | `R\&D` | Same as above |
+| `50%` | `50\%` | Bare `%` = comment character in LaTeX |
+| `S&P` | `S\&P` | Same as M&A |
+
+Also:
+- [ ] No forced line breaks (`\\`) inside semantic content (experience bullets, summary)
+- [ ] No text boxes, floating sidebars, or table-based experience sections
+- [ ] Contact info must be in the **document body** — not headers/footers
+
+### Gate 3: Reading Order Safety ✓
+
+- [ ] **Single-column layout only** for ATS submission
+  - Multi-column = parser reads columns sequentially, disconnecting job titles from descriptions
+- [ ] **The Notepad Test:** Copy-paste the PDF text into Notepad. If reading order is coherent (not column-interleaved), document is safe
+- [ ] `pdftotext [resume].pdf -` reads top-to-bottom without fragmentation
+- [ ] Standard section headings only:
+  - ✅ `Professional Experience`, `Work Experience`, `Education`, `Skills`, `Certifications`
+  - ❌ `Where I've Been`, `Academic Journey`, `My Toolkit`
+
+### Gate 4: Semantic Quality ✓
+
+ATS scoring weights (2026):
+
+| Metric | Weight | What It Checks |
+|--------|--------|----------------|
+| Keywords/Skills Match | **40%** | Exact match + semantic variation density |
+| Experience Relevance | **25%** | Career trajectory and industry context alignment |
+| Job Title/Seniority | **10%** | Progression toward target role complexity |
+| Education/Certifications | **10%** | Credential verification |
+| Recency/Seniority | **10%** | Skills used in last 24 months weighted higher |
+| Document Structure | **5%** | Machine-readability and section demarcation |
+
+- [ ] Every bullet follows F-pattern: metric or scope in the **first 3 words**
+- [ ] No buzzword chains without STAR evidence (scores ~0.44 — rejected; STAR scores ~0.76 — top band)
+- [ ] Skills in the Skills block **also appear** in experience bullets with context
+- [ ] Max 15–25 skills in Skills section (50+ triggers "keyword stuffing" AI detection)
+
+### Gate 5: Accessibility Compliance (PDF/UA-2) ✓
+
+Standard: **ISO 14289-2** (released March 2024) built on PDF 2.0
+
+- [ ] All text is selectable (never submit a scanned/image-based PDF)
+- [ ] Do NOT apply Adobe Acrobat's "Auto-tagging" — it overwrites LaTeX's semantic tags with generic inaccessible ones
+- [ ] For high-stakes applications: validate with **veraPDF** or **PAC 2024**
+- [ ] Font must have a complete **ToUnicode CMap** (LuaLaTeX with `tagging=on` guarantees this)
+
+> **Why PDF/UA-2 matters for ATS:** Many multinational firms use unified ATS platforms across EU/US offices. Since June 2025 (European Accessibility Act), PDF/UA-2 is mandatory in the EU. These platforms default to the EU standard globally. A properly tagged LuaLaTeX document is the safest universal choice.
+
+---
+
+## 8. All Reusable "Flagship Stories" (The Core Proof Arsenal)
+
+These 6 stories are pre-loaded in the AI's candidate reference data and picked based on JD priority:
+
+| Story Name | Metric | Use For |
+|-----------|--------|---------|
+| **"Cleanup Catastrophe"** | SQL latency 4.2s→1.8s (57%) via index optimization; race conditions resolved at Innova Solutions | Backend, SWE, Data Engineering |
+| **"Vibrating Agent"** | PPO agent achieving 92% collision-free navigation in Isaac Sim + ROS 2; reward hacking eliminated via pybind11 C++ reward functions | RL, Robotics, Autonomy, Sim2Real |
+| **"SNAT Exhaustion"** | Azure VNet + Private Endpoints resolved SNAT exhaustion (70% reduction in outbound TCP) | Cloud Infra, Reliability, Networking |
+| **"Frontera Checkpoint"** | HPC checkpoint time 45min→<2min by migrating per-rank file writes to parallel HDF5 collective I/O on TACC | HPC, Distributed Systems |
+| **"RAG Pipeline"** | FAISS + sentence transformers → sub-50ms retrieval, 91% accuracy on 1,000+ docs; ONNX INT8 quantization cut model size 75% | LLM, AI/ML, Search |
+| **"CI/CD Pipeline"** | Deploy time cut 40% (45min→27min); Azure DevOps + GitHub Actions; 99.9% deployment success | DevOps, Platform, Cloud |
+
+---
+
+## 9. All Documents in the System — What Each One Does
+
+| File | Role in Pipeline | Referenced By |
+|------|-----------------|---------------|
+| `AI_Career_Strategy_Prompt.md` | **Master AI brain** — the full 4-step CoT+ReAct prompt | Workflow step 3; you paste this into AI chat |
+| `resume_template.tex` | **Resume base** — LuaLaTeX structure, packages, geometry | AI output is pasted into the copied version |
+| `cover_letter_template.tex` | **Cover letter base** — LuaLaTeX structure, formatting | AI output is pasted into the copied version |
+| `ATS_Document_Engineering_2026.md` | **Technical compliance reference** — 5 validation gates, ATS scoring weights, PDF/UA-2 spec | AI prompt Section 2.5; Gates 1–5 checklist |
+| `Resume_Length_Strategy_2026.md` | **Length decision protocol** — 4-phase research methodology | AI prompt Step 1 (Phases 1–4) |
+| `Cover_Letter_Standards_2026.md` | **CL structure reference** — paragraph templates, proof story bank, keyword rules | AI prompt Step 3 |
+| `2026_Application_Standards.md` | **Summary standards doc** — core philosophy, key rules, escaping guide | AI prompt global constraints section |
+| `Generate-Application.ps1` | **Scaffold automation** — creates folder, copies all files, names correctly | Workflow step 1; run first |
+| `generate-application.md` | **Workflow runbook** — the 4-step human instruction guide | `/generate-application` slash command |
+| `job_description.md` | **JD input** — you paste the full JD here | AI reads this as its primary input |
+| `README.md` (per application) | **Hiring manager snapshot** — AI-generated, <200 words | AI output; Step 4 of the process |
+
+---
+
+## 10. Candidate Master Reference Data (Ground Truth — Never Fabricated)
+
+The AI has these hardcoded as ground truth in the prompt:
+
+**Identity:**
+- Name: Savyasachi Thati
+- Location: San Marcos, TX 78666
+- Email: savyasachi.thati@gmail.com
+- Phone: (817) 622-4814
+- Portfolio: https://savyasachi6.github.io/savya-portfolio/
+- GitHub: https://github.com/savyasachi6
+- LinkedIn: https://linkedin.com/in/savyasachi-thati
+- Medium: https://medium.com/@savyasachi.thati
+
+**9 Published Medium Articles** (cite only when relevant to JD — e.g., governance roles benefit from prompt engineering article; HPC roles benefit from multi-GPU benchmarking)
+
+**7 Public GitHub Repos** (link only those genuinely relevant to the JD — not all repos on every application):
+
+| Repo | Domain |
+|------|--------|
+| nova-carter-rl-ppo-navigation | RL, Robotics, ROS 2, Isaac Sim |
+| traffic_control_rl_pygame | DRL, real-time control |
+| relational_connectional_rag | LLM, RAG, hybrid search, multi-agent |
+| robot_llm_control | LLM, robotics, task planning |
+| DL-ParallelTraining | HPC, distributed ML, TACC Frontera |
+| cartpole-benchmarks-reinforce-a2c | RL fundamentals, A2C, REINFORCE |
+| savya-portfolio | Full-stack TypeScript portfolio site |
+
+---
+
+## 11. Key Design Principles (Why the System Works This Way)
+
+| Principle | What It Means |
+|-----------|--------------|
+| **"Risk-Owned Payloads"** | Every bullet shows Agency — you didn't just do tasks, you owned outcomes under uncertain conditions |
+| **"Risk Architect" framing** | Identify failure modes → own the debugging path → deliver measurable improvements |
+| **F-Pattern bullet structure** | Recruiters scan left-to-right, top-to-bottom; metric in first 3 words catches the eye before they scroll away |
+| **Zero-party data rule** | Every metric in the cover letter must be a real number you inject (%, $, time savings) — not AI-hallucinated |
+| **Golden Thread** | One unifying narrative connects your entire history to the role; appears in summary, bullets, README, and cover letter |
+| **Semantic variations** | Don't repeat JD keywords verbatim >2x — use related terms instead; ATS semantic parsers score variations higher |
+| **Single-column LaTeX** | Multi-column layouts cause ATS to read columns sequentially, disconnecting job titles from their descriptions |
+| **LuaLaTeX mandatory** | Only LuaLaTeX supports `\DocumentMetadata`, `unicode-math`, and `fontspec` — required for PDF/UA-2 and correct ToUnicode CMap |
+| **Language escaping** | `C\#`, `M\&A`, `R\&D`, `50\%` — bare special chars in LaTeX break compilation or OCR extraction |
+| **15–25 skills max** | 50+ skills without STAR context = AI flags as keyword stuffing; focused list scores higher |
+
+---
+
+## 12. Common Failure Scenarios & How the System Prevents Them
+
+| Failure | Prevention |
+|---------|-----------|
+| ATS rejects resume for formatting | Single-column LaTeX + PDF/UA-2 + Notepad Test |
+| PDF text becomes garbled after copy-paste | LuaLaTeX ToUnicode CMap (e.g., "file" doesn't become "le") |
+| LaTeX compile error on `C#` | `AI_Career_Strategy_Prompt.md` explicitly instructs: use `C\#` |
+| LaTeX compile error on `&` | Prompt instructs: use `\&` for all ampersands |
+| Wrong compiler used | All templates have `% COMPILER: LuaLaTeX` comment at top |
+| Resume too long/short | 4-phase research protocol in `Resume_Length_Strategy_2026.md` runs before any writing |
+| Cover letter feels generic | Business-need hook requires JD-specific company research (not mission statement) |
+| Skills listed without evidence | Gate 4 check: every skill must appear in experience bullets with a result |
+| AI-generated text flagged | Humanization directive in prompt prevents robotic transitions / perfectly uniform sentence structures |
+| Wrong story selected for cover letter | Proof story selection table maps JD priority → specific story automatically |
+| Multi-column breaks ATS | Template is single-column only; no tables in experience section |
+| Header/footer contact info lost | Prompt and template both enforce: contact info in document BODY only |
+
+---
+
+## 13. The Full File Flow at a Glance
+
+```
+YOU RUN:
+  .\automation\Generate-Application.ps1 -JobTitle "SWE" -Company "SpaceX"
+
+  → Applications/Feb24/SpaceX_SWE/ is created with 9 files
+
+YOU DO:
+  Paste full JD into job_description.md
+
+YOU DO:
+  Copy AI_Career_Strategy_Prompt.md
+  Fill in: Role, Company, JD, Current Resume
+  Paste into AI (Gemini / GPT / Claude)
+
+AI REASONS (internally):
+  Phase 1: JD archetype = Defense/Aerospace → 2 page signal
+  Phase 2: Levels.fyi shows L5 equivalent → 2 page signal
+  Phase 3: Glassdoor shows "lack of depth" rejections → 2 page signal
+  Phase 4: FINAL = 2 PAGES (override triggered)
+  JD signals: Heisenbugs, race conditions, distributed systems, CUDA, C++
+  Golden Thread: "Scalable Autonomy Systems Builder"
+
+AI WRITES:
+  spaceX_swe_resume.tex   (2-page, SpaceX signals: Heisenbugs, race conditions)
+  spaceX_swe_coverletter.tex (Vibrating Agent story in P2; first-principles tone)
+  README.md               (3 bullets from RL/robotics + distributed systems)
+
+YOU DO:
+  Paste .tex content into the copied template files
+  Run: lualatex spaceX_swe_resume.tex
+  Run: lualatex spaceX_swe_coverletter.tex
+
+YOU CHECK:
+  ✓ Gate 1: Compiled with zero errors
+  ✓ Gate 2: C\# escaped, no \\ in bullets
+  ✓ Gate 3: Notepad test passes (linear reading order)
+  ✓ Gate 4: Every bullet front-loads metric; 20 skills with STAR evidence
+  ✓ Gate 5: veraPDF shows 0 critical PDF/UA-2 errors
+
+YOU SUBMIT:
+  spaceX_swe_resume.pdf + spaceX_swe_coverletter.pdf
+```
+

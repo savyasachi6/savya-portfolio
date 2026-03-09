@@ -3,11 +3,11 @@ import { Code2, Database, LayoutTemplate, Cpu, Cloud, Globe } from "lucide-react
 export const SKILL_CATEGORIES = [
     {
         name: "Languages",
-        skills: ["C++", "Python", "Rust", "Golang", "C# / .NET", "SQL", "Assembly"],
+        skills: ["TypeScript", "Python", "Go", "C++", "SQL"],
     },
     {
         name: "HPC & AI",
-        skills: ["CUDA", "PyTorch", "Slurm", "MPI", "Parallel I/O (Lustre)", "Transformers", "PPO / DQN"],
+        skills: ["LangGraph", "LangChain", "pgvector", "RAG", "Multi-Agent Systems", "PyTorch"],
     },
     {
         name: "Robotics & Simulation",
@@ -24,10 +24,10 @@ export const SKILL_CATEGORIES = [
 ];
 
 export const TOP_SKILLS = [
-    { name: "Distributed Systems Architecture", value: 95, icon: Database },
-    { name: "High-Performance Computing", value: 90, icon: Cpu },
-    { name: "Applied Reinforcement Learning", value: 90, icon: Globe },
-    { name: "Microservices & Kubernetes", value: 85, icon: Cloud },
-    { name: "Low-Level Optimization (C++/CUDA)", value: 85, icon: Code2 },
-    { name: "Simulation Environments (Isaac)", value: 80, icon: LayoutTemplate },
+    { name: "LLM Agents & Multi-Agent Systems", value: 95, icon: Database },
+    { name: "Retrieval-Augmented Generation (RAG)", value: 90, icon: Cpu },
+    { name: "Distributed Systems Architecture", value: 90, icon: Globe },
+    { name: "AI Engineering & Applied ML", value: 85, icon: Cloud },
+    { name: "Microservices & Kubernetes", value: 85, icon: Code2 },
+    { name: "High-Performance Computing", value: 80, icon: LayoutTemplate },
 ];

@@ -13,7 +13,7 @@ const TERMINAL_LINES = [
     "> contact",
     "savyasachi.thati@gmail.com",
     "> status",
-    "Available for full-time roles — Feb 2026",
+    "Available for full-time roles",
     "_"
 ];
 
