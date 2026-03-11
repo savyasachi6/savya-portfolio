@@ -27,7 +27,7 @@ export const Hero: React.FC = () => {
                     The intersection of <span className="text-primary">AI</span> and craft.
                 </h2>
                 <p className="max-w-2xl font-sans text-lg md:text-xl text-text-muted text-balance">
-                    Exploring reinforcement learning architectures, scalable inference servers, and immersive web experiences. Graduate Researcher & Teaching Assistant at Texas State University.
+                    Exploring LLM Agents, Contextual RAG architectures, and highly concurrent distributed systems. Graduate Researcher & Teaching Assistant at Texas State University.
                 </p>
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8 w-full sm:w-auto">
                     <Button size="lg" className="w-full sm:w-auto" onClick={() => window.location.href = '#work'}>
