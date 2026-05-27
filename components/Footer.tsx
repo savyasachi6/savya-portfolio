@@ -2,11 +2,10 @@
 
 import React from "react";
 
-import { Github, Linkedin, ExternalLink } from "lucide-react";
+import { Github, ExternalLink } from "lucide-react";
 
 const LINKS = [
     { label: "GitHub",   href: "https://github.com/savyasachi6",                icon: Github },
-    { label: "LinkedIn", href: "https://linkedin.com/in/savyasachi-thati",      icon: Linkedin },
     { label: "Medium",   href: "https://medium.com/@savyasachi.thati",          icon: ExternalLink },
 ];
 
