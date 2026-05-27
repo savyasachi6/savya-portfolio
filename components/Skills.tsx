@@ -100,7 +100,7 @@ export const Skills: React.FC = () => {
                         <div className="flex flex-col gap-6">
                             {SKILL_CATEGORIES.map((category, i) => (
                                 <motion.div
-                                    key={category.name}
+                                    key={category.title}
                                     initial={{ opacity: 0, y: 12 }}
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true, margin: "-30px" }}
@@ -111,12 +111,12 @@ export const Skills: React.FC = () => {
                                         className="text-[10px] font-semibold uppercase tracking-[0.18em]"
                                         style={{ color: "var(--text-muted)" }}
                                     >
-                                        {category.name}
+                                        {category.title}
                                     </h4>
                                     <div className="flex flex-wrap gap-2">
                                         {category.skills.map((skill) => (
                                             <span
-                                                key={skill}
+                                                key={skill.name}
                                                 className="rounded-full px-3 py-1 text-xs font-medium transition-all duration-200 cursor-default"
                                                 style={{
                                                     background: "rgba(255,255,255,0.04)",
@@ -134,7 +134,7 @@ export const Skills: React.FC = () => {
                                                     e.currentTarget.style.background = "rgba(255,255,255,0.04)";
                                                 }}
                                             >
-                                                {skill}
+                                                {skill.name}
                                             </span>
                                         ))}
                                     </div>

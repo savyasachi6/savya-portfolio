@@ -67,7 +67,7 @@ export const Overlay: React.FC = () => {
                     className="eyebrow mb-6 pointer-events-none"
                     style={{ background: "rgba(0,0,0,0.4)" }}
                 >
-                    Research Focus
+                    Engineering Focus
                 </span>
                 <h2
                     className="font-display font-semibold text-balance max-w-3xl"
@@ -78,8 +78,8 @@ export const Overlay: React.FC = () => {
                         textShadow: "0 0 60px rgba(0,0,0,0.8)",
                     }}
                 >
-                    Orchestrating autonomous control{" "}
-                    <span style={{ color: "var(--color-primary)" }}>at scale.</span>
+                    Building LLM systems{" "}
+                    <span style={{ color: "var(--color-primary)" }}>that ship to production.</span>
                 </h2>
             </motion.div>
 
@@ -97,7 +97,7 @@ export const Overlay: React.FC = () => {
                         textShadow: "0 0 60px rgba(0,0,0,0.9)",
                     }}
                 >
-                    Bridging physical systems and AI —
+                    Enterprise backends. Agentic AI.
                 </h2>
                 <p
                     className="font-sans font-semibold italic mt-3"
@@ -107,7 +107,7 @@ export const Overlay: React.FC = () => {
                         textShadow: "0 0 40px rgba(0,0,0,0.8)",
                     }}
                 >
-                    engineered for zero failure.
+                    engineered for zero downtime.
                 </p>
             </motion.div>
 

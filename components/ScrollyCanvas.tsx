@@ -42,7 +42,7 @@ export const ScrollyCanvas: React.FC<ScrollyCanvasProps> = ({ children }) => {
     const loadPercent = Math.round((imagesLoaded / TOTAL_FRAMES) * 100);
 
     return (
-        <div ref={containerRef} className="relative w-full" style={{ height: "500vh" }}>
+        <div ref={containerRef} className="relative w-full" style={{ height: "200vh" }}>
             {!isReady ? (
                 /* ── Loading state — matches design system ── */
                 <div

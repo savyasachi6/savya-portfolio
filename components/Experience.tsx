@@ -2,55 +2,85 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Briefcase, GraduationCap, Code2 } from "lucide-react";
+import { Briefcase, GraduationCap, Code2, Brain, Cpu } from "lucide-react";
 
 const EXPERIENCES = [
     {
-        title: "Graduate Research — Autonomous Systems",
+        title: "Teaching Assistant — Data Structures & Algorithms",
         company: "Texas State University",
         location: "San Marcos, TX",
-        period: "Jan 2024 – Dec 2025",
-        type: "Research",
+        period: "Jan 2025 – Aug 2025",
+        type: "Teaching",
         icon: GraduationCap,
         color: "var(--color-accent)",
-        tag: "RL · Robotics · HPC",
+        tag: "Python · Algorithms",
         achievements: [
-            "Architected a CUDA-accelerated simulation pipeline in Isaac Sim, implementing memory optimization and distributed batching across dual-GPU clusters — accelerating training by 45% and lifting hardware utilization from 68% to 94%.",
-            "Enabled 200-hour stress tests without memory degradation, validating long-horizon autonomous navigation at scale.",
-            "Developed custom C++ reward functions via pybind11 for ROS2-based navigation; eliminated 'Vibrating Agent' local optima artifact, improving navigation safety by 38% (92% collision-free on edge cases).",
-            "Re-engineered HPC checkpoint pipeline on TACC Frontera: reduced 57,000 Lustre I/O ops to 1 via node-local /tmp staging, cutting checkpoint time from 45 min to under 2 min.",
-        ],
-    },
-    {
-        title: "Teaching Assistant — CS Department",
-        company: "Texas State University",
-        location: "San Marcos, TX",
-        period: "Jan 2024 – Dec 2025",
-        type: "Teaching",
-        icon: Code2,
-        color: "var(--color-emerald)",
-        tag: "Education · Mentorship",
-        achievements: [
-            "Delivered lab sessions and office hours for graduate-level AI and systems courses, mentoring 80+ students on distributed computing, ML pipelines, and software engineering fundamentals.",
-            "Designed supplementary materials on LLM prompt engineering and RAG architectures, bridging academic theory with industry practice.",
+            "Guided graduate and undergraduate students in advanced Data Structures & Algorithms, focusing on Python-based problem solving crucial for scalable AI engineering and data science.",
+            "Evaluated technical assignments covering graph traversal, dynamic programming, and optimization—core concepts underpinning modern AI systems, RAG retrieval, and search algorithms.",
+            "Mentored students on writing highly optimized, memory-efficient code, bridging the gap between theoretical algorithms and scalable machine learning development.",
         ],
     },
     {
         title: "Software Engineer",
-        company: "Innova Solutions",
-        location: "Hyderabad, India",
-        period: "Jun 2021 – Dec 2023",
+        company: "Clinithink (via Innova Solutions)",
+        location: "London, UK",
+        period: "Jul 2022 – Jan 2024",
         type: "Industry",
         icon: Briefcase,
         color: "var(--color-primary)",
-        tag: "Backend · ML · Distributed Systems",
+        tag: "Backend · Python · AI Integration",
         achievements: [
-            "Redesigned SQL Server indexing strategy and refactored .NET microservices on Kubernetes for better fault domain isolation — reducing median query latency by 57% (4.2s → 1.8s).",
-            "Diagnosed and resolved Azure App Service SNAT port exhaustion for 100K+ daily API requests: migrated to connection pooling via global using patterns, cutting outbound TCP connections by 70%.",
-            "Implemented distributed session persistence for 50K+ concurrent users, achieving 99.99% service availability across a platform serving 50+ enterprise clients.",
-            "Integrated PyTorch-based deep learning models into production infrastructure using ONNX Runtime optimization and INT8 quantization — achieving <100ms inference latency at 10K+ daily predictions.",
-            "Built LLM-powered document search prototype using FAISS + sentence-transformers: sub-50ms retrieval at 91% accuracy across 1,000+ enterprise documents.",
-            "Established Azure DevOps + GitHub Actions CI/CD pipeline — reduced deployment time by 40% (45 min → 27 min) with 99.9% deployment success rate.",
+            "Architected enterprise infrastructure and high-throughput microservices using FastAPI and Python, supporting clinical data workflows and large-scale NLP inference pipelines.",
+            "Integrated Large Language Models (LLMs) and embeddings for healthcare text analysis, building secure RAG (Retrieval-Augmented Generation) architectures over vector databases.",
+            "Engineered event-driven backend patterns using Azure WebJobs and Azure Storage for asynchronous data processing, accelerating the turnaround of ML predictions and data ingestion.",
+            "Built end-to-end MLOps pipelines using Azure DevOps CI/CD, enabling zero-downtime deployments and continuous monitoring for deployed AI models.",
+        ],
+    },
+    {
+        title: "Associate Software Engineer",
+        company: "Clinithink (via Innova Solutions)",
+        location: "Atlanta, GA",
+        period: "Jun 2021 – Jul 2022",
+        type: "Industry",
+        icon: Code2,
+        color: "var(--color-emerald)",
+        tag: "Backend · AWS · Data Pipelines",
+        achievements: [
+            "Built robust backend data integration pipelines and Python-based utilities, establishing the foundational data layer for downstream machine learning and AI-driven healthcare applications.",
+            "Engineered scalable RESTful services using AWS Lambda and API Gateway, exposing predictive models and data endpoints to internal clinical applications.",
+            "Optimized SQL database interactions and implemented feature engineering pipelines utilizing Pandas and NumPy, ensuring high-quality data retrieval for analytical workflows.",
+            "Developed automated operational scripts and CI/CD enhancements using Python, improving the reliability and reproducibility of testing and deployment processes for data services.",
+        ],
+    },
+    {
+        title: "Deep Learning & AI Engineer",
+        company: "Unisys",
+        location: "Hyderabad, India",
+        period: "Jul 2019 – Jan 2020",
+        type: "AI/ML",
+        icon: Brain,
+        color: "hsl(270,80%,65%)",
+        tag: "Deep Learning · PyTorch · MLOps",
+        achievements: [
+            "Developed CNN-based computer vision models and deep learning classification workflows using PyTorch and TensorFlow, achieving high accuracy for enterprise use cases.",
+            "Designed production-ready inference APIs utilizing Flask, optimizing data throughput and latency for real-time model execution in compute-aware environments.",
+            "Implemented robust data preprocessing, normalization, and augmentation pipelines, improving model generalizability and training stability.",
+            "Integrated deep-learning outputs directly into enterprise backend systems, demonstrating strong end-to-end systems engineering and deployment capabilities.",
+        ],
+    },
+    {
+        title: "MLOps Intern",
+        company: "Verzeo",
+        location: "Hyderabad, India",
+        period: "Feb 2020 – Apr 2020",
+        type: "MLOps",
+        icon: Cpu,
+        color: "hsl(200,80%,55%)",
+        tag: "MLOps · Python · Automation",
+        achievements: [
+            "Automated end-to-end model training, evaluation, and validation workflows in Python, significantly reducing manual experimentation cycles for predictive models.",
+            "Scripted parameterized machine learning experiments using Scikit-Learn, enhancing hyper-parameter tuning and validation throughput across multiple datasets.",
+            "Established rigorous logging and benchmarking discipline using ML tracking tools, creating reproducible and scalable ML pipelines.",
         ],
     },
 ];
@@ -67,7 +97,7 @@ const itemVariants = {
 
 export const Experience: React.FC = () => {
     return (
-        <section id="experience" className="w-full py-24 md:py-36" style={{ background: "var(--bg-base)" }}>
+        <section id="experience" className="w-full pt-16 pb-24 md:pt-20 md:pb-36" style={{ background: "var(--bg-base)" }}>
             <div className="mx-auto max-w-4xl px-6 md:px-12">
 
                 {/* Section header */}
@@ -85,6 +115,9 @@ export const Experience: React.FC = () => {
                     >
                         Experience
                     </h2>
+                    <p className="mt-4 text-base md:text-lg" style={{ color: "var(--text-secondary)" }}>
+                        6+ years building scalable AI systems, NLP inference pipelines, and production-grade MLOps environments across healthcare and enterprise software.
+                    </p>
                 </motion.div>
 
                 {/* Timeline */}
@@ -103,7 +136,7 @@ export const Experience: React.FC = () => {
                         const Icon = exp.icon;
                         return (
                             <motion.div
-                                key={exp.title}
+                                key={`${exp.title}-${exp.period}`}
                                 variants={itemVariants}
                                 className="relative pl-10 md:pl-14"
                             >

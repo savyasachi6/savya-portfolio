@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { Terminal, BrainCircuit, Zap, Globe } from "lucide-react";
 
 const ROLES = [
     "AI Engineer",
@@ -13,10 +14,10 @@ const ROLES = [
 ];
 
 const STATS = [
-    { value: "6+", label: "Years Building" },
-    { value: "92%", label: "Collision-Free RL" },
-    { value: "57%", label: "Latency Reduction" },
-    { value: "50K+", label: "Users Served" },
+    { value: "6+ Years", label: "Production Engineering", icon: Terminal },
+    { value: "<50ms", label: "RAG Inference Latency", icon: Zap },
+    { value: "99.99%", label: "Service Availability", icon: Globe },
+    { value: "92%", label: "Collision-Free RL", icon: BrainCircuit },
 ];
 
 export const Hero: React.FC = () => {
@@ -50,7 +51,7 @@ export const Hero: React.FC = () => {
     }, [displayed, typing, roleIndex]);
 
     return (
-        <section className="relative flex min-h-[100dvh] w-full flex-col items-center justify-center px-6 pb-16 pt-28 text-center">
+        <section className="relative flex w-full flex-col items-center px-6 pb-20 pt-32 text-center md:pb-32 md:pt-40">
 
             {/* Ambient glow orbs — GPU composited */}
             <div
@@ -159,12 +160,12 @@ export const Hero: React.FC = () => {
                     className="max-w-2xl font-sans text-lg text-balance md:text-xl"
                     style={{ color: "var(--text-secondary)", lineHeight: 1.7 }}
                 >
-                    Exploring LLM Agents, contextual RAG architectures, and
-                    highly concurrent distributed systems.{" "}
+                    AI Engineer with 6+ years building production-grade backends,
+                    LLM-powered applications, and cloud-native systems.{" "}
                     <span style={{ color: "var(--text-primary)" }}>
-                        Graduate Researcher &amp; Teaching Assistant
+                        M.S. Computer Science
                     </span>{" "}
-                    at Texas State University.
+                    · Texas State University · Austin, TX.
                 </motion.p>
 
                 {/* CTAs — Magnetic button-in-button pattern */}
@@ -223,31 +224,61 @@ export const Hero: React.FC = () => {
                     </a>
                 </motion.div>
 
-                {/* Stats row */}
+                {/* Stats row — Premium Bento Style */}
                 <motion.div
                     initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.95, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                    className="mt-4 grid grid-cols-2 gap-px overflow-hidden rounded-2xl sm:grid-cols-4"
-                    style={{ border: "1px solid rgba(255,255,255,0.06)", background: "rgba(255,255,255,0.06)" }}
+                    className="mt-8 flex flex-wrap justify-center gap-4 sm:gap-6 w-full"
                 >
-                    {STATS.map((stat) => (
-                        <div
-                            key={stat.label}
-                            className="flex flex-col items-center gap-1 px-6 py-4"
-                            style={{ background: "var(--bg-surface)" }}
-                        >
-                            <span
-                                className="font-display text-2xl font-bold"
-                                style={{ color: "var(--color-primary)" }}
+                    {STATS.map((stat) => {
+                        const Icon = stat.icon;
+                        return (
+                            <motion.div
+                                key={stat.label}
+                                whileHover={{ y: -4, scale: 1.02 }}
+                                className="group relative flex items-center gap-4 rounded-2xl px-6 py-4 transition-all duration-300"
+                                style={{ 
+                                    background: "rgba(255,255,255,0.02)",
+                                    border: "1px solid rgba(255,255,255,0.06)",
+                                    boxShadow: "0 4px 24px -4px rgba(0,0,0,0.4)"
+                                }}
                             >
-                                {stat.value}
-                            </span>
-                            <span className="text-xs font-medium" style={{ color: "var(--text-muted)" }}>
-                                {stat.label}
-                            </span>
-                        </div>
-                    ))}
+                                {/* Subtle hover glow */}
+                                <div 
+                                    className="absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-500 group-hover:opacity-100" 
+                                    style={{ background: "radial-gradient(circle at center, rgba(255,107,53,0.08), transparent 70%)" }} 
+                                />
+                                
+                                {/* Icon wrapper */}
+                                <div 
+                                    className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl transition-colors duration-300" 
+                                    style={{ 
+                                        background: "rgba(255,107,53,0.1)", 
+                                        color: "var(--color-primary)",
+                                        border: "1px solid rgba(255,107,53,0.15)"
+                                    }}
+                                >
+                                    <Icon className="h-5 w-5" />
+                                </div>
+                                
+                                <div className="flex flex-col items-start text-left z-10">
+                                    <span 
+                                        className="font-display text-2xl font-bold tracking-tight" 
+                                        style={{ color: "var(--text-primary)" }}
+                                    >
+                                        {stat.value}
+                                    </span>
+                                    <span 
+                                        className="text-xs font-semibold uppercase tracking-wider mt-0.5" 
+                                        style={{ color: "var(--text-muted)" }}
+                                    >
+                                        {stat.label}
+                                    </span>
+                                </div>
+                            </motion.div>
+                        );
+                    })}
                 </motion.div>
             </motion.div>
         </section>
