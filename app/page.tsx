@@ -7,17 +7,19 @@ import { Experience } from "@/components/Experience";
 import { Projects } from "@/components/Projects";
 import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
+import { CursorSpotlight } from "@/components/CursorSpotlight";
 
 export default function Home() {
   return (
     <>
+      <CursorSpotlight />
       <Navbar />
       <ScrollyCanvas>
         <Overlay />
       </ScrollyCanvas>
       <Hero />
-      <Skills />
       <Experience />
+      <Skills />
       <Projects />
       <Contact />
       <Footer />

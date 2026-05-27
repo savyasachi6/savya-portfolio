@@ -1,33 +1,47 @@
-import { Code2, Database, LayoutTemplate, Cpu, Cloud, Globe } from "lucide-react";
+import { Brain, Database, Cloud, Code2, GitBranch, Cpu, Globe, Zap } from "lucide-react";
 
 export const SKILL_CATEGORIES = [
     {
         name: "Languages",
-        skills: ["TypeScript", "Python", "Go", "C++", "SQL"],
+        skills: ["Python", "TypeScript", "C++", "Go", "SQL", "Bash"],
     },
     {
-        name: "HPC & AI",
-        skills: ["LangGraph", "LangChain", "pgvector", "RAG", "Multi-Agent Systems", "PyTorch"],
+        name: "AI / GenAI Frameworks",
+        skills: ["LangChain", "LangGraph", "LlamaIndex", "AutoGen", "LangFlow", "Hugging Face", "OpenAI API", "Vertex AI", "AWS Bedrock"],
     },
     {
-        name: "Robotics & Simulation",
-        skills: ["ROS2", "Isaac Sim", "Isaac Lab", "Nav2", "pybind11"],
+        name: "LLMs & NLP",
+        skills: ["GPT-4o", "Claude", "Gemini", "BERT", "T5", "LoRA / PEFT", "Prompt Engineering", "RAG", "GraphRAG"],
     },
     {
-        name: "Distributed Systems",
-        skills: ["Kubernetes", "Docker", "gRPC", "mTLS", "RBAC", "OpenTelemetry (OTel)"],
+        name: "ML / Deep Learning",
+        skills: ["PyTorch", "TensorFlow", "Scikit-learn", "XGBoost", "ONNX", "CUDA", "H2O.ai"],
     },
     {
-        name: "Infrastructure",
-        skills: ["Azure", "AWS", "Terraform", "CI/CD", "Apache Iceberg"],
-    }
+        name: "Vector Databases & Search",
+        skills: ["FAISS", "Pinecone", "Milvus", "pgvector", "OpenSearch", "ChromaDB", "Neo4j"],
+    },
+    {
+        name: "MLOps & Infra",
+        skills: ["MLflow", "Docker", "Kubernetes", "AWS SageMaker", "Kubeflow", "CI/CD", "Terraform", "Airflow"],
+    },
+    {
+        name: "Robotics & HPC",
+        skills: ["ROS2", "Isaac Sim", "Isaac Lab", "Nav2", "pybind11", "Slurm", "MPI", "HDF5"],
+    },
+    {
+        name: "Cloud & Data",
+        skills: ["AWS", "Azure", "GCP", "PySpark", "Kafka", "Apache Spark", "Databricks", "Apache Iceberg"],
+    },
 ];
 
 export const TOP_SKILLS = [
-    { name: "LLM Agents & Multi-Agent Systems", value: 95, icon: Database },
-    { name: "Retrieval-Augmented Generation (RAG)", value: 90, icon: Cpu },
-    { name: "Distributed Systems Architecture", value: 90, icon: Globe },
-    { name: "AI Engineering & Applied ML", value: 85, icon: Cloud },
-    { name: "Microservices & Kubernetes", value: 85, icon: Code2 },
-    { name: "High-Performance Computing", value: 80, icon: LayoutTemplate },
+    { name: "LLMs, RAG & Agentic AI Architecture",    value: 95, icon: Brain },
+    { name: "Multi-Agent Systems (LangGraph / AutoGen)", value: 93, icon: Cpu },
+    { name: "MLOps & Production AI Deployment",       value: 90, icon: GitBranch },
+    { name: "Vector Databases & Semantic Search",     value: 90, icon: Database },
+    { name: "Python Engineering & Backend Services",  value: 92, icon: Code2 },
+    { name: "Distributed Systems Architecture",       value: 88, icon: Globe },
+    { name: "Cloud Platforms (AWS / Azure / GCP)",   value: 85, icon: Cloud },
+    { name: "High-Performance Computing & Robotics",  value: 82, icon: Zap },
 ];

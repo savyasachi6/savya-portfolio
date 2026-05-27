@@ -1,14 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    output: "export",
-    basePath: "/savya-portfolio",
-    assetPrefix: "/savya-portfolio/",
+    // Vercel native — no static export, no basePath
     images: {
-        unoptimized: true
+        // Profile photo uses Next.js Image — let Vercel optimize it
+        unoptimized: false,
     },
-    env: {
-        NEXT_PUBLIC_BASE_PATH: "/savya-portfolio"
-    }
 };
 
 export default nextConfig;

@@ -4,85 +4,131 @@ import React, { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 
+/**
+ * Overlay — 3 scroll-driven text panels layered on top of ScrollyCanvas.
+ * Absolute positioning within the 500vh ScrollyCanvas container.
+ * Panels fade in/out as user scrolls through the sequence.
+ */
 export const Overlay: React.FC = () => {
-    // Use the window scroll since the overlay sits on top spanning the body or wrap it appropriately.
-    // We'll calculate the progress locally based on viewport.
-    // But wait! This overlay should be layered on top of ScrollyCanvas, meaning it should read the same progress.
-    // A cleaner approach for global layout is to pass scrollYProgress via context or rely on window scroll here too.
-    // For the sake of the prompt "Three text panels layered on top of the canvas (position: absolute, z-index: 10)":
-    // We will position this container over the 500vh area relative to the parent.
-
     const ref = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
 
-    // Panel 1: 0 - 33%
-    const p1Opacity = useTransform(scrollYProgress, [0, 0.25, 0.30, 0.33], [1, 1, 1, 0]);
-    const p1Y = useTransform(scrollYProgress, [0, 0.25, 0.30, 0.33], [0, 0, 0, -30]);
+    // Panel 1: 0 – 33%
+    const p1Opacity = useTransform(scrollYProgress, [0, 0.22, 0.30, 0.34], [1, 1, 0.5, 0]);
+    const p1Y      = useTransform(scrollYProgress, [0, 0.22, 0.30, 0.34], [0, 0,  -16, -32]);
 
-    // Panel 2: 33 - 66%
-    const p2Opacity = useTransform(scrollYProgress, [0.33, 0.38, 0.60, 0.66], [0, 1, 1, 0]);
-    const p2Y = useTransform(scrollYProgress, [0.33, 0.38, 0.60, 0.66], [30, 0, 0, -30]);
+    // Panel 2: 33 – 66%
+    const p2Opacity = useTransform(scrollYProgress, [0.33, 0.40, 0.58, 0.66], [0, 1, 1, 0]);
+    const p2Y       = useTransform(scrollYProgress, [0.33, 0.40, 0.58, 0.66], [24, 0,  0, -24]);
 
-    // Panel 3: 66 - 100%
-    const p3Opacity = useTransform(scrollYProgress, [0.66, 0.71, 0.95, 1], [0, 1, 1, 0]);
-    const p3Y = useTransform(scrollYProgress, [0.66, 0.71, 0.95, 1], [30, 0, 0, -30]);
+    // Panel 3: 66 – 100%
+    const p3Opacity = useTransform(scrollYProgress, [0.66, 0.73, 0.93, 1], [0, 1, 1, 0]);
+    const p3Y       = useTransform(scrollYProgress, [0.66, 0.73, 0.93, 1], [24, 0,  0, -20]);
 
-    // Scroll Indicator Chevron
-    const chevronOpacity = useTransform(scrollYProgress, [0, 0.05], [1, 0]);
+    // Scroll indicator fades out at 5%
+    const chevronOpacity = useTransform(scrollYProgress, [0, 0.06], [1, 0]);
 
     return (
         <div ref={ref} className="absolute inset-0 z-10 pointer-events-none">
 
-            {/* Panel 1 */}
+            {/* ── Panel 1: Identity ── */}
             <motion.div
                 style={{ opacity: p1Opacity, y: p1Y }}
-                className="sticky top-0 flex h-screen w-full flex-col items-center justify-center text-center px-4"
+                className="sticky top-0 flex h-screen w-full flex-col items-center justify-center text-center px-6"
             >
-                <h1 className="font-display text-6xl md:text-8xl font-bold tracking-tight text-text-primary">
-                    <span className="block mb-2">Savyasachi Thati</span>
+                <h1 className="font-display font-bold tracking-tight text-balance"
+                    style={{
+                        color: "var(--text-primary)",
+                        fontSize: "clamp(2.5rem, 8vw, 6rem)",
+                        lineHeight: 1.05,
+                        textShadow: "0 0 80px rgba(0,0,0,0.8)",
+                    }}
+                >
+                    Savyasachi Thati
                 </h1>
-                <p className="font-sans text-xl md:text-2xl text-text-muted mt-4">
-                    HPC, AI, LLM Agents/RAG & <span className="text-primary">Distributed Systems.</span>
+                <p
+                    className="mt-4 font-sans text-lg md:text-2xl"
+                    style={{
+                        color: "var(--text-secondary)",
+                        textShadow: "0 2px 20px rgba(0,0,0,0.9)",
+                    }}
+                >
+                    LLM Agents · RAG ·{" "}
+                    <span style={{ color: "var(--color-primary)" }}>Distributed Systems</span>
                 </p>
             </motion.div>
 
-            {/* Panel 2 */}
+            {/* ── Panel 2: Domain ── */}
             <motion.div
                 style={{ opacity: p2Opacity, y: p2Y }}
-                className="sticky top-0 flex h-screen w-full flex-col items-start justify-center px-8 md:px-24 xl:px-48"
+                className="sticky top-0 flex h-screen w-full flex-col items-start justify-center px-8 md:px-20 xl:px-40"
             >
-                <h2 className="font-display text-4xl md:text-7xl font-semibold max-w-4xl">
-                    Orchestrating autonomous control <span className="text-primary">at scale.</span>
+                <span
+                    className="eyebrow mb-6 pointer-events-none"
+                    style={{ background: "rgba(0,0,0,0.4)" }}
+                >
+                    Research Focus
+                </span>
+                <h2
+                    className="font-display font-semibold text-balance max-w-3xl"
+                    style={{
+                        color: "var(--text-primary)",
+                        fontSize: "clamp(1.8rem, 5vw, 4.5rem)",
+                        lineHeight: 1.1,
+                        textShadow: "0 0 60px rgba(0,0,0,0.8)",
+                    }}
+                >
+                    Orchestrating autonomous control{" "}
+                    <span style={{ color: "var(--color-primary)" }}>at scale.</span>
                 </h2>
             </motion.div>
 
-            {/* Panel 3 */}
+            {/* ── Panel 3: Thesis ── */}
             <motion.div
                 style={{ opacity: p3Opacity, y: p3Y }}
-                className="sticky top-0 flex h-screen w-full flex-col items-end justify-center px-8 md:px-24 xl:px-48 text-right"
+                className="sticky top-0 flex h-screen w-full flex-col items-end justify-center px-8 md:px-20 xl:px-40 text-right"
             >
-                <h2 className="font-display text-3xl md:text-5xl font-semibold max-w-2xl text-text-primary">
+                <h2
+                    className="font-display font-semibold max-w-xl"
+                    style={{
+                        color: "var(--text-primary)",
+                        fontSize: "clamp(1.5rem, 3.5vw, 3rem)",
+                        lineHeight: 1.2,
+                        textShadow: "0 0 60px rgba(0,0,0,0.9)",
+                    }}
+                >
                     Bridging physical systems and AI —
                 </h2>
-                <p className="font-sans text-xl md:text-2xl text-accent font-medium mt-4 italic">
+                <p
+                    className="font-sans font-semibold italic mt-3"
+                    style={{
+                        color: "var(--color-accent)",
+                        fontSize: "clamp(1.2rem, 2.5vw, 2rem)",
+                        textShadow: "0 0 40px rgba(0,0,0,0.8)",
+                    }}
+                >
                     engineered for zero failure.
                 </p>
             </motion.div>
 
-            {/* Scroll Indicator */}
+            {/* ── Scroll indicator ── */}
             <motion.div
                 style={{ opacity: chevronOpacity }}
-                className="fixed bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center"
+                className="fixed bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none"
             >
-                <p className="text-xs uppercase tracking-widest text-muted mb-2 font-medium">Scroll</p>
+                <p
+                    className="font-mono text-[10px] uppercase tracking-widest"
+                    style={{ color: "var(--text-muted)" }}
+                >
+                    Scroll
+                </p>
                 <motion.div
                     animate={{ y: [0, 8, 0] }}
-                    transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                    transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
                 >
-                    <ChevronDown className="h-6 w-6 text-primary" />
+                    <ChevronDown className="h-5 w-5" style={{ color: "var(--color-primary)" }} />
                 </motion.div>
             </motion.div>
-
         </div>
     );
 };
